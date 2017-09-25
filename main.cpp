@@ -3,7 +3,7 @@
 #include "USBSerial.h"
 
 USBSerial pc(0x1f00, 0x2012, 0x0001, false, 17000);  // connect_blocking = false, buf_size = 17000
-RawSerial wifi_serial(P3_15, P0_2);
+RawSerial wifi_serial(P7_1, P0_1);
 
 InterruptIn button0(USER_BUTTON0);
 InterruptIn button1(USER_BUTTON1);
