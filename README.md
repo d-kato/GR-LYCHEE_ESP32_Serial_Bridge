@@ -5,11 +5,17 @@ GR-LYCHEEの開発環境については、[GR-LYCHEE用オフライン開発環�
 
 
 ## 使い方
-### シリアル設定
-GR-LYCHEEのUSB0ポートをPCと接続して使用します。  
-Windows10以外ご使用の場合、ドライバのインストールが必要となります。下記サイトの「Driver required on Windows!」からドライバーをダウンロードできます。  
+コンパイル済みの``GR-LYCHEE_ESP32_Serial_Bridge.bin``と``ESP32をATコマンド用のファームウェア「esp32-at」``が`docs\esp32-at_bin.zip`内に格納されています。  
+サンプルコードをそのまま使用する場合はプロジェクト内`docs\esp32-at_bin.zip`を展開し、``GR-LYCHEE_ESP32_Serial_Bridge.bin``をGR-LYCHEEに書き込んで使用してください。  
 
-https://developer.mbed.org/handbook/USBSerial
+### シリアル設定
+``GR-LYCHEE_ESP32_Serial_Bridge``はGR-LYCHEEの``MicroUSBコネクタ(RZ/A1LU Ch.0)``をPCと接続して使用します。  
+
+![](docs/img/usb0_and_button.jpg)  
+
+Windows10以外ご使用の場合、ドライバのインストールが必要となります。下記サイトのからドライバーをダウンロードできます。  
+
+https://os.mbed.com/docs/latest/tutorials/windows-serial-driver.html
 
 但し、「署名なしドライバ」となっていますので、お使いのWindowsバージョンによってはそのままインストールすることはできません。お使いのPC毎に設定方法が異なるため、検索サイトで「署名なしドライバ」で検索してください。  
 
@@ -24,19 +30,19 @@ https://developer.mbed.org/handbook/USBSerial
 | フロー制御 | none   |
 
 ### ボタン
-US0ボタンでEN端子、US1ボタンでBOOT端子を操作できます。ボタンを押すとLOW、離すと HIGHになります。  
+`USER_BUTTON0`でEN端子、`USER_BUTTON1`でBOOT端子を操作できます。ボタンを押すとLOW、離すと HIGHになります。  
 
-### ESP32のFlash書き込み
-ESP32を書き込みモードにする際は、US1を押しながらUS0を短押し、その後US1を離します。  
+### ESP32をFlash書き込みモードにする
+ESP32を書き込みモードにする際は、`USER_BUTTON1`を押しながら`USER_BUTTON0`を短押し、その後`USER_BUTTON1`を離します。  
 
-##### Flash Download Toolsの使い方
-フラッシュ書き込みの例として、ここでは、Windows PC版 Flash Download Tools V3.4.4の使い方を紹介します。  
+### Flash Download Toolsの使い方
+``ESP32をATコマンド用のファームウェア「esp32-at」``の書き込みを例に、Windows PC版 Flash Download Tools V3.6.2.2の使い方を紹介します。下記より``Flash Download Tools (ESP8266 & ESP32)``をダウンロードしてください。  
 
 Espressif’s official Flash Download Tools:  
 http://espressif.com/en/support/download/other-tools?keys=&field_type_tid%5B%5D=13
 
 
-`flash_download_tools_v3.4.4.zip`を展開し、`ESPFlashDownloadTool_v3.4.4.exe`を実行します。  
+`flash_download_tools_v3.6.2.2.zip`を展開し、`ESPFlashDownloadTool_v3.6.2.2.exe`を実行します。  
 
 ![](docs/img/esp32_tool_1.jpg)  
 *ESP32 DownloadTool* を選択します。  
@@ -44,9 +50,13 @@ http://espressif.com/en/support/download/other-tools?keys=&field_type_tid%5B%5D=
 ![](docs/img/esp32_tool_2.jpg)  
 
 1. 書き込み用の.binファイルを設定します。  
+  ``ESP32をATコマンド用のファームウェア「esp32-at」``に書き換える場合は`docs\esp32-at_bin.zip`内の書き込み用の.binファイルを下記のように設定してください。  
+  bootloader.bin(0x1000)、partitions_at.bin(0x8000)、phy_init_data.bin(0xF000)、esp-at.bin(0x100000)、at_customize.bin(0x20000)、GattServiceExample.bin(0x21000)。  
+  左のチェックボックスにも忘れずにチェックを入れてください。  
 2. SPI SPEEDに*40MHz*を設定します。  
 3. SPI MODEに*DIO*を設定します。  
 4. FLASH SIZEに*32Mbit*を設定します。  
-5. COMにUSB0に割り当たったCOMポートを設定します。  
-6. ボーレートを選択します。460800bpsでの書き込みを確認できていますが、書き込みに失敗するようでしたらボーレートを下げてください。
-7. ESP32を書き込みモードにするため、GR-LYCHEEのUS1を押しながらUS0を短押し、その後US1を離します。ターミナルソフトソフトで該当のCOMポートを開いている場合は、ターミナルソフトを終了させ、COMポートを開放してください。最後にツールのSTARTボタンを押すと書き込みを開始します。  
+5. COMに``MicroUSBコネクタ(RZ/A1LU Ch.0)``に割り当たったCOMポートを設定します。  
+6. ボーレートを選択します。1152000bpsでの書き込みを確認できていますが、書き込みに失敗するようでしたらボーレートを下げてください。
+7. ESP32を書き込みモードにします(上記"ESP32をFlash書き込みモードにする"を参照)。ターミナルソフトソフトで``MicroUSBコネクタ(RZ/A1LU Ch.0)``に該当するCOMポートを開いている場合は、ターミナルソフトを終了させ、COMポートを開放してください。ツールのERASEボタンを押すと不要なデータの消去を開始します。上記図の緑色で「IDLE」と表示されている部分が「FINISH」になるまで待ってください。  
+8. もう一度、ESP32を書き込みモードにします(上記"ESP32をFlash書き込みモードにする"を参照)。ツールのSTARTボタンを押すと書き込みを開始します。上記図の緑色で「IDLE」と表示されている部分が「FINISH」になるまで待ってください。  
