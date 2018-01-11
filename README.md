@@ -3,6 +3,7 @@ ESP32(UART)とPC(USB)をブリッジするサンプルプログラムです。
 ESP32の評価やFlash書き込みの際にご利用いただけます。  
 GR-LYCHEEの開発環境については、[GR-LYCHEE用オフライン開発環境の手順](https://developer.mbed.org/users/dkato/notebook/offline-development-lychee-langja/)を参照ください。
 
+GR-PEACHで``GR-WIRELESS CAMERA ShieldESP32``を使用する場合は、[GR-Boards_ESP32_Serial_Bridge](https://github.com/d-kato/GR-Boards_ESP32_Serial_Bridge) がご利用になれます。ボタンの使い方がGR-LYCHEE_ESP32_Serial_Bridgeとは異なりますが、GR-LYCHEEとGR-PEACHのどちらでも動作させることができます。
 
 ## 使い方
 コンパイル済みの``GR-LYCHEE_ESP32_Serial_Bridge.bin``と``ESP32をATコマンド用のファームウェア「esp32-at」``が`docs\esp32-at_bin.zip`内に格納されています。  
